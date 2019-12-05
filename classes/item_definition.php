@@ -15,17 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   block_edutrader
- * @copyright 2020 Center for Learning Management (www.lernmanagement.at)
- * @author    Robert Schrenk
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_edutrader
+ * @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
+ * @author     Robert Schrenk
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- $string['cachedef_launches'] = 'Cache holding information when we launched a specific item.';
+/**
+ * Lists all available items.
+ * item
+ * -> pix: a screenshot
+ * -> title: the title to show
+ * -> type: gametype for filters
+ * -> price: how much funnies are required
+ * -> duration: how many seconds can we use the item for the price paid?
+ */
 
-$string['edutrader:addinstance'] = 'Enable eduTrading';
-$string['FNS'] = 'Funnies';
-$string['pluginname'] = 'eduTrader';
-$string['privacy:metadata'] = 'Not storing personal information';
-$string['use_in_course_only'] = 'For use in courses only!';
-$string['yourcredit'] = 'You have {$a->credit} FNS';
+$items = array(
+    'super_chrono_portal_maker' = array(
+        'pix' => 'an_image_here',
+        'title' => 'Super Chrono Portal Maker',
+        'type' => 'Jump & Run',
+        'price' => 100,
+        'duration' => 600,
+    ),
+);

@@ -15,17 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   block_edutrader
- * @copyright 2020 Center for Learning Management (www.lernmanagement.at)
- * @author    Robert Schrenk
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_edutrader
+ * @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
+ * @author     Robert Schrenk
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- $string['cachedef_launches'] = 'Cache holding information when we launched a specific item.';
+require_once('../../../config.php');
 
-$string['edutrader:addinstance'] = 'Enable eduTrading';
-$string['FNS'] = 'Funnies';
-$string['pluginname'] = 'eduTrader';
-$string['privacy:metadata'] = 'Not storing personal information';
-$string['use_in_course_only'] = 'For use in courses only!';
-$string['yourcredit'] = 'You have {$a->credit} FNS';
+if (defined('block_edutrader_item')) $item = block_edutrader_item;
+else $item = required_param('item', PARAM_TEXT);
+$redeem = optional_param('redeem', 0, PARAM_INT);

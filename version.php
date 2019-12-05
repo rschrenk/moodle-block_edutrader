@@ -28,3 +28,6 @@ $plugin->requires = 2014051200;
 $plugin->component = 'block_edutrader';
 $plugin->release = '0.1 (Build: 2019120400) - Just an Idea';
 $plugin->maturity = MATURITY_STABLE;
+$plugin->dependencies = array(
+    'block_xp' => 2019112000,
+);

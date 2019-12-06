@@ -45,7 +45,7 @@ class block_edutrader extends block_base {
         }
         $credit = \block_edutrader\lib::get_credit($COURSE->id);
 
-        $this->content->text = get_string('yourcredit', 'block_edutrader', array('credit' => number_format($credit/100, 2)));
+        $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block', array('courseid' => $COURSE->id, 'credit' => $credit));
 
 
         return $this->content;

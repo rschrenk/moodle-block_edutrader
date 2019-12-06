@@ -46,9 +46,6 @@ class lib {
         $exp = $DB->get_record('block_xp', $params);
         $redeemed = $DB->get_record('block_edutrader_credit', $params);
         $credit = 0;
-        print_r($exp);
-        print_r($redeemed);
-        //die("habe fertig");
         if (!empty($exp->xp) && !empty($redeemed->creditredeemed)) $credit = $exp->xp - $redeemed->creditredeemed;
         elseif (!empty($exp->xp)) $credit = $exp->xp;
         return $credit;

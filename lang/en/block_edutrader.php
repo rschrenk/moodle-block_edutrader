@@ -25,6 +25,7 @@
 
 $string['edutrader:addinstance'] = 'Enable eduTrading';
 $string['FNS'] = 'Funnies';
+$string['go_have_fun'] = 'Go and have some fun!';
 $string['pluginname'] = 'eduTrader';
 $string['privacy:metadata'] = 'Not storing personal information';
 $string['use_in_course_only'] = 'For use in courses only!';

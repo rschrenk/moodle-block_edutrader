@@ -38,15 +38,41 @@ class block_edutrader extends block_base {
         if ($this->content !== null) {
             return $this->content;
         }
+
+        // Ensure that block_xp is enabled.
+        $this->check_block_xp();
+
         $this->content = (object) array('footer' => '', 'text' => '');
         if (empty($COURSE->id) || $COURSE->id == 1) {
             $this->content->text = get_string('use_in_course_only', 'block_edutrader');
             return $this->content;
         }
-        $credit = \block_edutrader\lib::get_credit();
+        $credit = \block_edutrader\lib::get_credit($COURSE->id);
         $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block', array('courseid' => $COURSE->id, 'credit' => $credit, 'wwwroot' => $CFG->wwwroot));
 
         return $this->content;
+    }
+    public function check_block_xp() {
+        global $COURSE, $DB;
+        // In the course that uses this block we also need block_xp!
+        $context = \context_course::instance($COURSE->id);
+        $count = $DB->count_records('block_instances', array('blockname' => 'xp', 'parentcontextid' => $context->id));
+        if ($count == 0) {
+            // Create edupublisher-block in targetcourse.
+            $blockdata = (object) array(
+                'blockname' => 'xp',
+                'parentcontextid' => $context->id,
+                'showinsubcontexts' => 0,
+                'requiredbytheme' => 0,
+                'pagetypepattern' => 'course-view-*',
+                'defaultregion' => 'side-post',
+                'defaultweight' => -10,
+                'configdata' => '',
+                'timecreated' => time(),
+                'timemodified' => time(),
+            );
+            $DB->insert_record('block_instances', $blockdata);
+        }
     }
     public function hide_header() {
         return false;

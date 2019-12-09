@@ -40,17 +40,24 @@ if (!isloggedin() || isguestuser($USER)) {
 }
 $item = block_edutrader_item;
 $redeem = optional_param('redeem', 0, PARAM_INT);
+$courseid = optional_param('courseid', 0, PARAM_INT);
+if (!empty($courseid)) {
+    require_login(get_course($courseid));
+    $context = \context_course::instance($COURSE->id);
+} else {
+    require_login();
+    $context = \context_user::instance($USER->id);
+}
 
-$context = \context_user::instance($USER->id);
 // Must pass login
-$PAGE->set_url('/blocks/edutrader/items/' . $item . '/index.php', array('redeem' => $redeem));
+$PAGE->set_url('/blocks/edutrader/items/' . $item . '/index.php', array('courseid' => $courseid, 'redeem' => $redeem));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
 $PAGE->set_heading(get_string('stock', 'block_edutrader'));
 $PAGE->set_pagelayout('mydashboard');
 $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
-$sessions = \block_edutrader\lib::get_sessions($USER->id, $item);
+$sessions = \block_edutrader\lib::get_sessions(0, $USER->id, $item);
 
 if (count($sessions) > 0) {
     // Ok, we can start, but set a timer!!!
@@ -60,7 +67,17 @@ if (count($sessions) > 0) {
     require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
     if (!empty($redeem)) {
         // User said yes to launch. Check if we have enough credit.
-        if (!\block_edutrader\lib::purchase_item($item)) {
+        if (empty($courseid)) {
+            // Show warning
+            echo $OUTPUT->header();
+            echo $OUTPUT->render_from_template('block_edutrader/alert', array(
+                'type' => 'danger',
+                'content' => get_string('missing_courseid', 'block_edutrader'),
+                'url' => $CFG->wwwroot . '/my',
+            ));
+            echo $OUTPUT->footer();
+            die();
+        } elseif (!\block_edutrader\lib::purchase_item($item, $courseid)) {
             // Show warning
             echo $OUTPUT->header();
             echo $OUTPUT->render_from_template('block_edutrader/alert', array(
@@ -75,10 +92,11 @@ if (count($sessions) > 0) {
             header("refresh: " . $sessions[0]->timeleft);
         }
     } else {
-        $credit = \block_edutrader\lib::get_credit();
+        $credit = \block_edutrader\lib::get_credit($courseid);
         $itemo = \block_edutrader\lib::get_item($item, $credit);
         echo $OUTPUT->header();
         echo $OUTPUT->render_from_template('block_edutrader/launch', array(
+            'courseid' => $courseid,
             'credit' => $credit,
             'itemprice' => $itemo->price,
             'itemduration_human' => $itemo->duration_readable,

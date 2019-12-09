@@ -3,50 +3,63 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
-  <TABLES>
-    <TABLE NAME="block_edutrader_credit" COMMENT="Credits of users">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User who published the package"/>
-        <FIELD NAME="creditredeemed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="How much credit was redeemed"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-          <INDEX NAME="idx_userid" UNIQUE="false" FIELDS="userid"/>
-      </INDEXES>
-    </TABLE>
-    <TABLE NAME="block_edutrader_trades" COMMENT="Tracks the trading-actions of users.">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User who published the package"/>
-        <FIELD NAME="item" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The identifier of the item"/>
-        <FIELD NAME="credit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="How much credit was invested"/>
-        <FIELD NAME="maturity" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The ending timestamp of this trade"/>
-        <FIELD NAME="created" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The time of the trade"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-          <INDEX NAME="idx_userid" UNIQUE="false" FIELDS="userid"/>
-      </INDEXES>
-    </TABLE>
-    <TABLE NAME="block_edutrader_items" COMMENT="List of potential items">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
-        <FIELD NAME="itemid" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The itemid"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The type of this item"/>
-        <FIELD NAME="price" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Price of one purchase"/>
-        <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of one purchase"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-          <INDEX NAME="idx_type" UNIQUE="false" FIELDS="type"/>
-      </INDEXES>
-    </TABLE>
-  </TABLES>
+    <TABLES>
+        <TABLE NAME="block_edutrader_courseconfig" COMMENT="course-specific configuration">
+            <FIELDS>
+              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
+              <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The courseid"/>
+              <FIELD NAME="config" TYPE="text" NOTNULL="false" COMMENT="The configuration in JSON"/>
+            </FIELDS>
+            <KEYS>
+              <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_edutrader_credit" COMMENT="Credits of users">
+          <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
+            <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User who published the package"/>
+            <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The course id"/>
+            <FIELD NAME="creditredeemed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="How much credit was redeemed"/>
+          </FIELDS>
+          <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+          </KEYS>
+          <INDEXES>
+              <INDEX NAME="idx_userid" UNIQUE="false" FIELDS="userid"/>
+          </INDEXES>
+        </TABLE>
+        <TABLE NAME="block_edutrader_items" COMMENT="List of potential items">
+          <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
+            <FIELD NAME="itemid" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The itemid"/>
+            <FIELD NAME="title" TYPE="char" LENGTH="160" NOTNULL="false" SEQUENCE="false" COMMENT="The title of the item"/>
+            <FIELD NAME="type" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The type of this item"/>
+            <FIELD NAME="price" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Price of one purchase"/>
+            <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of one purchase"/>
+          </FIELDS>
+          <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+          </KEYS>
+          <INDEXES>
+              <INDEX NAME="idx_type" UNIQUE="false" FIELDS="type"/>
+          </INDEXES>
+        </TABLE>
+        <TABLE NAME="block_edutrader_trades" COMMENT="Tracks the trading-actions of users.">
+          <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="true"/>
+            <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User who published the package"/>
+            <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The courseid of that purchase"/>
+            <FIELD NAME="item" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false" COMMENT="The identifier of the item"/>
+            <FIELD NAME="credit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="How much credit was invested"/>
+            <FIELD NAME="maturity" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The ending timestamp of this trade"/>
+            <FIELD NAME="created" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The time of the trade"/>
+          </FIELDS>
+          <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+          </KEYS>
+          <INDEXES>
+              <INDEX NAME="idx_userid" UNIQUE="false" FIELDS="userid"/>
+          </INDEXES>
+        </TABLE>
+    </TABLES>
 </XMLDB>

@@ -23,9 +23,19 @@
 
 $string['edutrader:addinstance'] = 'Aktiviere eduTrading';
 $string['FNS'] = 'Funnies';
-$string['go_have_fun'] = 'Los - hab ein bischen Spaß!';
+$string['go_have_fun'] = 'Los - hab ein bisschen Spaß!';
+$string['missing_courseid'] = 'Kurs-ID wird benötigt!';
 $string['pluginname'] = 'eduTrader';
-$string['privacy:metadata'] = 'Dieses Plugin speichert keine persönlichen Daten!';
+$string['privacy:credit'] = 'Informationen über das Guthaben von Nutzer/innen';
+$string['privacy:credit:userid'] = 'Die Nutzer-ID';
+$string['privacy:credit:creditredeemed'] = 'Wieviel Guthaben bereits ausgegeben wurde.';
+$string['privacy:trades'] = 'Informationen über die Käufe von Nutzer/innen';
+$string['privacy:trades:userid'] = 'Die Nutzer-ID';
+$string['privacy:trades:courseid'] = 'Die Kurs-ID';
+$string['privacy:trades:item'] = 'Die ID eines Artikels.';
+$string['privacy:trades:credit'] = 'Wieviel Guthaben bei diesem Kauf investiert wurde.';
+$string['privacy:trades:maturity'] = 'Wie lange der Kauf anhält.';
+$string['privacy:trades:created'] = 'Der Zeitpunkt des Kaufs.';
 $string['proceed_session'] = 'Diese Session fortsetzen';
 $string['redeem'] = 'Einlösen';
 $string['stock'] = 'Angebot';

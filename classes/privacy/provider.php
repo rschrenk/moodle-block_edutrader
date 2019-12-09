@@ -16,7 +16,7 @@
 
 /**
  * @package    block_edutrader
- * @copyright  2020 Center for Learning Management (http://www.lernmanagement.at)
+ * @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
  * @author     Robert Schrenk
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,8 +26,44 @@ use core_privacy\local\metadata\collection;
 
 defined('MOODLE_INTERNAL') || die;
 
-class provider implements \core_privacy\local\metadata\null_provider {
-    public static function get_reason() : string {
-        return 'privacy:metadata';
+class provider implements \core_privacy\local\metadata\provider {
+    public static function get_metadata(collection $collection) : collection {
+        $collection->add_database_table(
+            'block_edutrader_credit',
+             array(
+                 'userid' => 'privacy:credit:userid',
+                 'creditredeemed' => 'privacy:credit:creditredeemed',
+             ),
+            'privacy:credit'
+        );
+        $collection->add_database_table(
+            'block_edutrader_trades',
+             array(
+                 'userid' => 'privacy:trades:userid',
+                 'courseid' => 'privacy:trades:courseid',
+                 'item' => 'privacy:trades:item',
+                 'credit' => 'privacy:trades:credit',
+                 'maturity' => 'privacy:trades:maturity',
+                 'created' => 'privacy:trades:created',
+             ),
+            'privacy:trades'
+        );
+
+        return $collection;
+    }
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param   int           $userid       The user to search.
+     * @return  contextlist   $contextlist  The list of contexts used in this plugin.
+    */
+    public static function get_contexts_for_userid(int $userid) : contextlist {
+        $contextlist = new \core_privacy\local\request\contextlist();
+
+        $sql = "SELECT * FROM {block_gps_reached} WHERE userid=?";
+        $params = ['userid' => $userid ];
+        $contextlist->add_from_sql($sql, $params);
+
+        return $contextlist;
     }
 }

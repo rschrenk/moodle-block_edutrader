@@ -21,13 +21,13 @@
     <p>{{#str}} yourcredit, block_edutrader, { "credit": {{#quote}}{{credit}}{{/quote}} }{{/str}}</p>
     {{#hassessions}}
         <p>{{#str}} proceed_session, block_edutrader {{/str}}</p>
-        <ul>
+        <ul id="sessions-{{uniqid}}">
             {{#sessions}}
             <li>
                 <a href="{{wwwroot}}/local/edutrader{{item}}/item/" target="_blank">
                     {{title}}
                 </a>
-                <span style="float: right;">{{timeleft_readable}}</span>
+                <span style="float: right;" class="timeleft" data-timeleft="{{timeleft}}">{{timeleft_readableshort}}</span>
             </li>
             {{/sessions}}
         </ul>
@@ -37,7 +37,7 @@
         <div class="stock-item"
             style="background-image: url({{picture}});">
             <a class="footer btn btn-block btn-secondary{{^canpurchase}} disabled{{/canpurchase}}"
-                {{#canpurchase}}href="{{wwwroot}}/local/edutrader{{itemid}}/item/"{{/canpurchase}}>
+                {{#canpurchase}}href="{{wwwroot}}/local/edutrader{{itemid}}/item/?courseid={{courseid}}"{{/canpurchase}}>
                 <span class="title">{{title}}</span>
                 <!--
                 <span class="price">{{price}} FNS</span>
@@ -48,3 +48,7 @@
         {{/items}}
     </div>
 </div>
+
+{{#js}}
+require(['block_edutrader/main'], function(main) { main.watchTimeleft('{{uniqid}}'); } );
+{{/js}}

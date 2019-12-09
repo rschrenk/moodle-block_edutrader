@@ -29,23 +29,32 @@ class lib {
     private static $items;
     /**
      * Get credit for this user.
+     * @param courseid the courseid
      * @param userid, if not set use $USER->id
      */
-    public static function get_credit($userid = 0) {
-        global $DB, $USER;
+    public static function get_credit($courseid = 0, $userid = 0) {
+        global $COURSE, $DB, $USER;
+        if (empty($courseid)) $courseid = $COURSE->id;
         if (empty($userid)) $userid = $USER->id;
-        $sql = "SELECT x.id,x.xp,tc.creditredeemed
-                    FROM {block_xp} x
-                    LEFT JOIN {block_edutrader_credit} tc ON
-                        x.userid = tc.userid
-                    WHERE x.userid = ".$userid;
-
-        $rows = array_values($DB->get_records_sql($sql, array($userid)));
-        $credit = 0;
-        foreach($rows AS $row) {
-            $credit += $row->xp - $row->creditredeemed;
+        $sql = "SELECT id,xp
+                    FROM {block_xp}
+                    WHERE courseid=?
+                        AND userid=?";
+        $xps = $DB->get_records_sql($sql, array($courseid, $userid));
+        $xpt = 0;
+        foreach ($xps AS $xp) {
+            $xpt += $xp->xp;
         }
-        return $credit;
+        $sql = "SELECT id,creditredeemed
+                    FROM {block_edutrader_credit}
+                    WHERE courseid=?
+                        AND userid=?";
+        $crs = $DB->get_records_sql($sql, array($courseid, $userid));
+        $crt = 0;
+        foreach ($crs AS $cr) {
+            $crt += $cr->creditredeemed;
+        }
+        return $xpt - $crt;
     }
     /**
      * Return a single item
@@ -68,7 +77,6 @@ class lib {
         $items = array_values($DB->get_records('block_edutrader_items', array()));
         foreach ($items AS &$item) {
             $item->duration_readable = self::readable_duration($item->duration);
-            $item->title = get_string('itemtitle', 'local_edutrader' . $item->itemid);
             $item->picture = $CFG->wwwroot . '/local/edutrader' . $item->itemid . '/pix/cover.png';
             //$item->duration_human = self::readable_duration($item->duration);
             if (!empty($credit)) {
@@ -79,10 +87,11 @@ class lib {
     }
     /**
      * Get sessions for a user.
+     * @param courseid or 0 for any course.
      * @param userid or 0 for current user.
      * @param itemid or empty for all items.
      */
-    public static function get_sessions($userid = 0, $itemid = '') {
+    public static function get_sessions($courseid = 0, $userid = 0, $itemid = '') {
         global $DB, $USER;
         if (empty($userid)) $userid = $USER->id;
         $sql = "SELECT *
@@ -90,8 +99,12 @@ class lib {
                     WHERE userid = ?
                         AND maturity > ?";
         $params = array($userid, time());
+        if (!empty($courseid)) {
+            $sql .= "\n\t\tAND courseid = ?";
+            $params[] = $courseid;
+        }
         if (!empty($itemid)) {
-            $sql .= "AND item = ?";
+            $sql .= "\n\t\tAND item = ?";
             $params[] = $itemid;
         }
         $sessions = array_values($DB->get_records_sql($sql, $params));
@@ -101,6 +114,7 @@ class lib {
             $session->title = $item->title;
             $session->timeleft = $session->maturity - time();
             $session->timeleft_readable = self::readable_duration($session->maturity - time());
+            $session->timeleft_readableshort = self::readable_duration_short($session->maturity - time());
         }
         return $sessions;
     }
@@ -108,19 +122,20 @@ class lib {
     /**
      * Purchase an item.
      * @itemid id of item.
+     * @courseid courseid to purchase in, if current course 0.
      * @userid userid to purchase for, if current user 0.
      */
-    public static function purchase_item($itemid, $userid = 0) {
-        if (empty($userid)) {
-            global $USER;
-            $userid = $USER->id;
-        }
-        $credit = \block_edutrader\lib::get_credit($userid);
+    public static function purchase_item($itemid, $courseid = 0, $userid = 0) {
+        global $COURSE, $DB, $USER;
+        if (empty($courseid)) { $courseid = $COURSE->id; }
+        if (empty($userid)) { $userid = $USER->id; }
+        $credit = \block_edutrader\lib::get_credit($courseid, $userid);
         $itemo = \block_edutrader\lib::get_item($itemid);
         if ($credit > $itemo->price) {
             global $DB;
             $trade = (object) array(
                 'userid' => $userid,
+                'courseid' => $courseid,
                 'item' => $itemid,
                 'credit' => $itemo->price,
                 'maturity' => (time() + $itemo->duration),
@@ -128,9 +143,10 @@ class lib {
             );
             $trade->id = $DB->insert_record('block_edutrader_trades', $trade);
             if (!empty($trade->id)) {
-                $rec = $DB->get_record('block_edutrader_credit', array('userid' => $userid));
+                $rec = $DB->get_record('block_edutrader_credit', array('courseid' => $courseid, 'userid' => $userid));
                 if (empty($rec->id)) {
                     $rec = (object) array(
+                        'courseid' => $courseid,
                         'userid' => $userid,
                         'creditredeemed' => $itemo->price
                     );
@@ -156,14 +172,24 @@ class lib {
         $tx = get_strings(array('t_seconds', 't_minutes', 't_hours', 't_days'), 'block_edutrader');
         $diff = $dtF->diff($dtT);
         if ($diff->d > 0) {
-            return $diff->format('%a ' . $tx->t_days . ' %h ' . $tx->t_hours . ' %i ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
+            return $diff->format('%a ' . $tx->t_days . ' %H ' . $tx->t_hours . ' %I ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
         }
         if ($diff->h > 0) {
-            return $diff->format('%h ' . $tx->t_hours . ' %i ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
+            return $diff->format('%H ' . $tx->t_hours . ' %I ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
         }
         if ($diff->i > 0) {
-            return $diff->format('%i ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
+            return $diff->format('%I ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
         }
         return $diff->format('%s ' . $tx->t_seconds);
+    }
+    /**
+     * Converts a duration to a human readable time range.
+     * @param seconds
+     */
+    public static function readable_duration_short($seconds) {
+        $dtF = new \DateTime('@0');
+        $dtT = new \DateTime("@$seconds");
+        $diff = $dtF->diff($dtT);
+        return $diff->format('%H:%I:%s');
     }
 }

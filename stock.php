@@ -30,16 +30,16 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
 
 // This triggers if we use credit from one course only.
-$course = optional_param('course', 0, PARAM_INT);
-require_login();
+$courseid = required_param('courseid', PARAM_INT);
+require_login(get_course($courseid));
 
-$context = \context_user::instance($USER->id);
+$context = \context_course::instance($courseid);
 // Must pass login
-$PAGE->set_url('/blocks/edutrader/stock.php', array('course' => $course));
+$PAGE->set_url('/blocks/edutrader/stock.php', array('courseid' => $courseid));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
 $PAGE->set_heading(get_string('stock', 'block_edutrader'));
-$PAGE->set_pagelayout('mydashboard');
+$PAGE->set_pagelayout('incourse');
 $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
 echo $OUTPUT->header();
@@ -50,7 +50,7 @@ $sessions = lib::get_sessions();
 
 echo $OUTPUT->render_from_template(
     'block_edutrader/stock',
-    array('credit' => $credit, 'hassessions' => count($sessions), 'items' => $items, 'sessions' => $sessions)
+    array('courseid' => $courseid, 'credit' => $credit, 'hassessions' => count($sessions), 'items' => $items, 'sessions' => $sessions)
 );
 
 echo $OUTPUT->footer();

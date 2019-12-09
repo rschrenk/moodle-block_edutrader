@@ -24,7 +24,7 @@
         <ul>
             {{#sessions}}
             <li>
-                <a href="{{wwwroot}}/local/edutrader{{item}}/" target="_blank">
+                <a href="{{wwwroot}}/local/edutrader{{item}}/item/" target="_blank">
                     {{title}}
                 </a>
                 <span style="float: right;">{{timeleft_readable}}</span>
@@ -37,7 +37,7 @@
         <div class="stock-item"
             style="background-image: url({{picture}});">
             <a class="footer btn btn-block btn-secondary{{^canpurchase}} disabled{{/canpurchase}}"
-                {{#canpurchase}}href="{{wwwroot}}/local/edutrader{{itemid}}/"{{/canpurchase}}>
+                {{#canpurchase}}href="{{wwwroot}}/local/edutrader{{itemid}}/item/"{{/canpurchase}}>
                 <span class="title">{{title}}</span>
                 <!--
                 <span class="price">{{price}} FNS</span>

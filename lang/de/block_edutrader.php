@@ -21,17 +21,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['edutrader:addinstance'] = 'Enable eduTrading';
+$string['edutrader:addinstance'] = 'Aktiviere eduTrading';
 $string['FNS'] = 'Funnies';
-$string['go_have_fun'] = 'Go and have some fun!';
+$string['go_have_fun'] = 'Los - hab ein bischen Spaß!';
 $string['pluginname'] = 'eduTrader';
-$string['privacy:metadata'] = 'Not storing personal information';
-$string['proceed_session'] = 'Proceed with session';
-$string['redeem'] = 'Redeem';
-$string['stock'] = 'Stock';
-$string['t_days'] = 'days';
-$string['t_hours'] = 'hours';
-$string['t_minutes'] = 'minutes';
-$string['t_seconds'] = 'seconds';
-$string['youareabouttolaunch'] = 'You are about to launch <strong>{$a->title}</strong> for {$a->price} FNS. This purchase lasts for {$a->duration_human}';
-$string['yourcredit'] = 'You have {$a->credit} FNS';
+$string['privacy:metadata'] = 'Dieses Plugin speichert keine persönlichen Daten!';
+$string['proceed_session'] = 'Diese Session fortsetzen';
+$string['redeem'] = 'Einlösen';
+$string['stock'] = 'Angebot';
+$string['t_days'] = 'Tage';
+$string['t_hours'] = 'Stunden';
+$string['t_minutes'] = 'Minuten';
+$string['t_seconds'] = 'Sekunden';
+$string['youareabouttolaunch'] = 'Du bist dabei <strong>{$a->title}</strong> für {$a->price} FNS zu starten. Dieser Kauf hält für {$a->duration_human}';
+$string['yourcredit'] = 'Du hast {$a->credit} FNS';

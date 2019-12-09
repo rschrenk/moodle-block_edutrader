@@ -18,12 +18,14 @@
 }}
 
 <div class="block-edutrader">
+    <p>{{#str}} youareabouttolaunch, block_edutrader, { "price": {{#quote}}{{itemprice}}{{/quote}}, "title": {{#quote}}{{itemtitle}}{{/quote}}, "duration_human": {{#quote}}{{itemduration_human}}{{/quote}} }{{/str}}</p>
     <p>{{#str}} yourcredit, block_edutrader, { "credit": {{#quote}}{{credit}}{{/quote}} }{{/str}}</p>
-    {{#credit}}
-    <p>
-        <a href="{{wwwroot}}/blocks/edutrader/stock.php" class="btn btn-primary btn-block">
-            {{#str}} go_have_fun, block_edutrader {{/str}}
-        </a>
-    </p>
-    {{/credit}}
+    <form method="POST" enctype="multipart/form-data" target="_blank" onsubmit="setTimeout(function() { top.location.href = '{{wwwroot}}/blocks/edutrader/stock.php';}, 100);">
+        <input type="hidden" name="redeem" value="1" />
+        <button type="submit" class="btn btn-block btn-secondary">
+            {{#str}} redeem, block_edutrader {{/str}}
+        </button>
+    </form>
+    <br />
+    <center><img src="{{itempicture}}" alt="{{#str}} preview {{/str}}" width="80%" /></center>
 </div>

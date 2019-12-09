@@ -43,10 +43,8 @@ class block_edutrader extends block_base {
             $this->content->text = get_string('use_in_course_only', 'block_edutrader');
             return $this->content;
         }
-        $credit = \block_edutrader\lib::get_credit($COURSE->id);
-
-        $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block', array('courseid' => $COURSE->id, 'credit' => $credit));
-
+        $credit = \block_edutrader\lib::get_credit();
+        $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block', array('courseid' => $COURSE->id, 'credit' => $credit, 'wwwroot' => $CFG->wwwroot));
 
         return $this->content;
     }

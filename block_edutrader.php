@@ -48,7 +48,15 @@ class block_edutrader extends block_base {
             return $this->content;
         }
         $credit = \block_edutrader\lib::get_credit($COURSE->id);
-        $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block', array('courseid' => $COURSE->id, 'credit' => $credit, 'wwwroot' => $CFG->wwwroot));
+        $this->content->text .= $OUTPUT->render_from_template('block_edutrader/block',
+            array(
+                'courseid' => $COURSE->id,
+                'credit' => $credit,
+                'isediting' => $PAGE->user_is_editing(),
+                'istrainer' => \block_edutrader\lib::is_trainer($COURSE->id),
+                'wwwroot' => $CFG->wwwroot,
+            ));
+
 
         return $this->content;
     }

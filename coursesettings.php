@@ -23,7 +23,7 @@
 namespace block_edutrader;
 
 /**
- * Show a list of all items in stock and if we can purchase them.
+ * Configure course specific settings.
  */
 require_once('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
@@ -35,7 +35,7 @@ require_login(get_course($courseid));
 
 $context = \context_course::instance($courseid);
 // Must pass login
-$PAGE->set_url('/blocks/edutrader/stock.php', array('courseid' => $courseid));
+$PAGE->set_url('/blocks/edutrader/coursesettings.php', array('courseid' => $courseid));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
 $PAGE->set_heading(get_string('stock', 'block_edutrader'));
@@ -44,17 +44,28 @@ $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
 echo $OUTPUT->header();
 
-$credit = lib::get_credit();
-$items = lib::get_items($credit);
-$sessions = lib::get_sessions();
-
-foreach ($items AS &$item) {
-    $item->is_available = lib::is_available($item->itemid, $courseid);
+if (!lib::is_trainer($courseid)) {
+    $OUTPUT->render_from_template('block_edutrader/alert', array(
+        'content' => get_string('missing_capability', 'block_edutrader'),
+        'type' => 'danger',
+        'url' => $CFG->wwwroot . '/course/view.php?id=' . $courseid,
+    ));
+} else {
+    // Show form.
+    require_once($CFG->dirroot . '/blocks/edutrader/classes/coursesettings_form.php');
+    $form = new coursesettings_form();
+    if ($form->is_cancelled()) {
+        redirect(new moodle_url('/blocks/edutrader/stock.php', array('courseid' => $courseid));
+    } elseif ($data = $form->get_data()) {
+        $config = array();
+        $items = lib::get_items();
+        foreach ($items AS $item) {
+            $config[$item->itemid] = $data->{'allow_' . $item->itemid};
+        }
+        lib::set_coursesettings($courseid, $config);
+        $form = new coursesettings_form();
+    }
+    $form->display();
 }
-
-echo $OUTPUT->render_from_template(
-    'block_edutrader/stock',
-    array('courseid' => $courseid, 'credit' => $credit, 'hassessions' => count($sessions), 'items' => $items, 'sessions' => $sessions)
-);
 
 echo $OUTPUT->footer();

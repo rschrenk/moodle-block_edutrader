@@ -69,7 +69,7 @@ class lib {
         }
     }
     /**
-     * Return items directly from config file.
+     * Return items.
      * @param credit of a user.
      */
     public static function get_items($credit = 0) {
@@ -81,6 +81,9 @@ class lib {
             //$item->duration_human = self::readable_duration($item->duration);
             if (!empty($credit)) {
                 $item->canpurchase = floor($credit / $item->price);
+            }
+            if (self::is_trainer()) {
+                $item->canpurchase = true;
             }
         }
         return $items;
@@ -118,6 +121,35 @@ class lib {
         }
         return $sessions;
     }
+    /**
+     * Determine course settings.
+     * @param courseid if not given use $COURSE.
+     */
+    public static function get_coursesettings($courseid = 0) {
+        global $COURSE, $DB;
+        if (empty($courseid)) $courseid = $COURSE->id;
+        $cs = $DB->get_record('block_edutrader_courseconfig', array('courseid' => $courseid));
+        $cs->config = (array)json_decode($cs->config);
+        return $cs;
+    }
+
+    /**
+     * Determine if an item is available in a course.
+     */
+    public static function is_available($itemid, $courseid) {
+        $coursesettings = self::get_coursesettings($courseid);
+        return !isset($coursesettings->config[$itemid]) || !empty($coursesettings->config[$itemid]);
+    }
+
+    /**
+     * Determine if a user has capabilities to act as trainer.
+     * @param courseid if not given use $COURSE.
+     */
+    public static function is_trainer($courseid = 0) {
+        global $COURSE;
+        if (empty($courseid)) $courseid = $COURSE->id;
+        return has_capability('moodle/course:update', \context_course::instance($courseid));
+    }
 
     /**
      * Purchase an item.
@@ -137,7 +169,7 @@ class lib {
                 'userid' => $userid,
                 'courseid' => $courseid,
                 'item' => $itemid,
-                'credit' => $itemo->price,
+                'credit' => (self::is_trainer() ? 0 : $itemo->price),
                 'maturity' => (time() + $itemo->duration),
                 'created' => time()
             );
@@ -148,11 +180,11 @@ class lib {
                     $rec = (object) array(
                         'courseid' => $courseid,
                         'userid' => $userid,
-                        'creditredeemed' => $itemo->price
+                        'creditredeemed' => (self::is_trainer() ? 0 : $itemo->price)
                     );
                     $DB->insert_record('block_edutrader_credit', $rec);
                 } else {
-                    $rec->creditredeemed += $itemo->price;
+                    $rec->creditredeemed += (self::is_trainer() ? 0 : $itemo->price);
                     $DB->update_record('block_edutrader_credit', $rec);
                 }
                 return true;
@@ -191,5 +223,25 @@ class lib {
         $dtT = new \DateTime("@$seconds");
         $diff = $dtF->diff($dtT);
         return $diff->format('%H:%I:%s');
+    }
+
+    /**
+     * Determine course settings.
+     * @param courseid courseid to set settings.
+     * @param settings settings as array.
+     */
+    public static function set_coursesettings($courseid, $settings) {
+        global $DB;
+        $cs = $DB->get_record('block_edutrader_courseconfig', array('courseid' => $courseid));
+        if (!empty($cs->id)) {
+            $cs->config = json_encode($settings, JSON_NUMERIC_CHECK);
+            $DB->update_record('block_edutrader_courseconfig', $cs);
+        } else {
+            $cs = (object) array(
+                'courseid' => $courseid,
+                'config' => json_encode($settings, JSON_NUMERIC_CHECK)
+            );
+            $DB->insert_record('block_edutrader_courseconfig', $cs);
+        }
     }
 }

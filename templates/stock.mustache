@@ -33,7 +33,7 @@
         </ul>
     {{/hassessions}}
     <div class="stock">
-        {{#items}}
+        {{#items}}{{#is_available}}
         <div class="stock-item"
             style="background-image: url({{picture}});">
             <a class="footer btn btn-block btn-secondary{{^canpurchase}} disabled{{/canpurchase}}"
@@ -45,7 +45,7 @@
                 -->
             </a>
         </div>
-        {{/items}}
+        {{/is_available}}{{/items}}
     </div>
 </div>
 

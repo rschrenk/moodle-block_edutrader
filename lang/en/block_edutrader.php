@@ -21,9 +21,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['coursesettings'] = 'eduTrader - course settings';
+$string['coursesettings:description'] = 'Choose here which items should be available.';
 $string['edutrader:addinstance'] = 'Enable eduTrading';
+$string['edutrader:myaddinstance'] = 'Enable eduTrading';
 $string['FNS'] = 'Funnies';
 $string['go_have_fun'] = 'Go and have some fun!';
+$string['missing_capability'] = 'Missing Capability!';
 $string['missing_courseid'] = 'Missing Course-ID!';
 $string['pluginname'] = 'eduTrader';
 $string['privacy:credit'] = 'Information about users credit';

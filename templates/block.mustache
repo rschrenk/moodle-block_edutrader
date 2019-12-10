@@ -26,4 +26,11 @@
         </a>
     </p>
     {{/credit}}
+    {{#istrainer}}{{#isediting}}
+    <p>
+        <a href="{{wwwroot}}/blocks/edutrader/coursesettings.php?courseid={{courseid}}" class="btn btn-secondary btn-block">
+            {{#str}} settings {{/str}}
+        </a>
+    </p>
+    {{/isediting}}{{/istrainer}}
 </div>

@@ -54,8 +54,8 @@ if (!lib::is_trainer($courseid)) {
     // Show form.
     require_once($CFG->dirroot . '/blocks/edutrader/classes/coursesettings_form.php');
     $form = new coursesettings_form();
-    if ($form->is_cancelled()) {
-        redirect(new moodle_url('/blocks/edutrader/stock.php', array('courseid' => $courseid));
+    if ($form->is_cancelled()) {
+        redirect(new \moodle_url('/course/view.php', array('id' => $courseid)));
     } elseif ($data = $form->get_data()) {
         $config = array();
         $items = lib::get_items();

@@ -74,8 +74,12 @@ class lib {
      */
     public static function get_items($credit = 0) {
         global $CFG, $DB;
-        $items = array_values($DB->get_records('block_edutrader_items', array()));
-        foreach ($items AS &$item) {
+        $dbitems = $DB->get_records('block_edutrader_items', array());
+        $items = array();
+        foreach ($dbitems AS $item) {
+            if (empty(get_config('local_edutrader' . $item->itemid, 'enabled'))) {
+                continue;
+            }
             $item->duration_readable = self::readable_duration($item->duration);
             $item->picture = $CFG->wwwroot . '/local/edutrader' . $item->itemid . '/pix/cover.png';
             //$item->duration_human = self::readable_duration($item->duration);
@@ -85,6 +89,7 @@ class lib {
             if (self::is_trainer()) {
                 $item->canpurchase = true;
             }
+            $items[] = $item;
         }
         return $items;
     }

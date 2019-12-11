@@ -47,5 +47,7 @@ $string['t_days'] = 'days';
 $string['t_hours'] = 'hours';
 $string['t_minutes'] = 'minutes';
 $string['t_seconds'] = 'seconds';
+$string['toggle_item_enabled'] = 'Enable {$a->title}';
+$string['toggle_item_enabled:description'] = 'You can deside if item <strong>{$a->title}</strong> is an available option in block_edutrader for your whole Moodle-Site.';
 $string['youareabouttolaunch'] = 'You are about to launch <strong>{$a->title}</strong> for {$a->price} FNS. This purchase lasts for {$a->duration_human}';
 $string['yourcredit'] = 'You have {$a->credit} FNS';

@@ -4,9 +4,9 @@ This is a gamification-plugin that builds upon the moodle block_xp-Plugin. EXP f
 ## Installation
 
 Basically you have to install this plugin as the core, but this plugin itself does not contain any games. Games have to be installed separately as local plugins. Besides this block, three such local plugins have been published:
-1. local_edutrader1024moves
-2. local_edutraderhexgl
-3. local_edutradersuperchronoportalmaker
+1. [local_edutrader1024moves](https://github.com/rschrenk/moodle-local_edutrader1024moves)
+2. [local_edutraderhexgl](https://github.com/rschrenk/moodle-local_edutraderhexgl)
+3. [local_edutradersuperchronoportalmaker](https://github.com/rschrenk/moodle-local_edutradersuperchronoportalmaker)
 
 After you have installed all 4 plugins, you can toggle the available site wide of certain games.
 

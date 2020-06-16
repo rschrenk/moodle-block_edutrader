@@ -53,7 +53,7 @@ $PAGE->set_url('/blocks/edutrader/items/' . $item . '/index.php', array('coursei
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
 $PAGE->set_heading(get_string('stock', 'block_edutrader'));
-$PAGE->set_pagelayout('mydashboard');
+
 $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
 $sessions = \block_edutrader\lib::get_sessions(0, $USER->id, $item);

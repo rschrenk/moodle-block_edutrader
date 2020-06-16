@@ -1,6 +1,6 @@
 define(
-    ['jquery', 'core/ajax', 'core/notification', 'core/str', 'core/url', 'core/modal_factory'],
-    function($, Ajax, Notification, Str, Url, ModalFactory) {
+    ['jquery'],
+    function($) {
     return {
         debug: 0,
         watchTimeleft: function(uniqid) {

@@ -161,7 +161,9 @@ class lib {
      */
     public static function is_trainer($courseid = 0) {
         global $COURSE;
-        if (empty($courseid)) $courseid = $COURSE->id;
+        if (empty($courseid)) {
+            $courseid = $COURSE->id;
+        }
         return has_capability('moodle/course:update', \context_course::instance($courseid));
     }
 

@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* @package    block_edutrader
-* @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
-* @author     Robert Schrenk
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * @package    block_edutrader
+ * @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
+ * @author     Robert Schrenk
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace block_edutrader\privacy;
 use core_privacy\local\metadata\collection;

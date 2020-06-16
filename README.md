@@ -1,9 +1,39 @@
 # moodle-block_trader
 This is a gamification-plugin that builds upon the moodle block_xp-Plugin. EXP from block_xp are used as currency (called "Funnies | FNS") and can be traded against playing time in small games.
 
+## Installation
 
-## Add any game
-Any HTML5-Game can be added to this plugin, just by creating a small moodle-plugin. Please use our 1024-moves-Game as template: https://github.com/rschrenk/moodle-local_edutrader1024moves
+Basically you have to install this plugin as the core, but this plugin itself does not contain any games. Games have to be installed separately as local plugins. Besides this block, three such local plugins have been published:
+1. local_edutrader1024moves
+2. local_edutraderhexgl
+3. local_edutradersuperchronoportalmaker
+
+After you have installed all 4 plugins, you can toggle the available site wide of certain games.
+
+![doc/edutrader-sitesettings.png]{Website settings}
+
+## Usage
+
+Teachers will have to use this plugin together with the "Level Up!"-Block, so that their students can gain levels. Once they added the edutrader-Block to the course, they can toggle availability of certain games on course level.
+
+![doc/edutrader-coursesettings.png]{Course settings}
+
+Once students gained enough experience from the "Level Up!"-Plugin, the button "Go and have som fun!" will apear in the edutrader-Block.
+
+![doc/edutrader-block.png]{Edutrader block}
+
+On the following page all available games are shown and the student can open the details page.
+
+![doc/edutrader-launch-choose.png]{Choose a game}
+![doc/edutrader-launch-session.png]{Launch a session}
+
+If for any reason the browser is closed or students navigate away, the session will still be open for that amount of time.
+
+![doc/edutrader-session-open.png]{Re-enter session}
+
+## Add new games
+
+Basically any HTML5-Game or other activity can be added to this plugin, just by creating a local moodle-plugin. Please use our 1024-moves-Game as template: https://github.com/rschrenk/moodle-local_edutrader1024moves
 
 You only need to do the following changes to this template plugin:
 
@@ -22,6 +52,9 @@ Enter the gameidentifier in the line
 ```
 $plugin->component = 'local_edutrader1024moves';
 ```
+### Modify lang/en/local_edutrader1024moves.php
+
+Rename the file to lang/en/localedutrader*gameidentifier*.php
 
 ### Modify db/install.php
 
@@ -37,10 +70,21 @@ Place the game-contents in the subdirectory "item". Rename the index.html to ind
 ```
 <?php
 require_once('../../../config.php');
-define('block_edutrader_item', 'gameidentifier');
+define('block_edutrader_item', '*gameidentifier*');
 require($CFG->dirroot . '/blocks/edutrader/launch.php');
 ?>
 ```
 ### Place an image
 
 Place a screenshot in the pix folder that is called cover.png.
+
+### Code styling
+
+You will make the moodle developers happy (and you should do that!), if you also update the data in the comments on the top of each php-Script. Please enter your name, the new plugin name and copyright notice in each of the following files:
+
+* classes/privacy/provider.php
+* db/install.php
+* db/uninstall.php
+* item/index.SuperChronoPortalMaker
+* lang/en/local_edutrader*gameidentifier*.php
+* version.php

@@ -88,3 +88,7 @@ You will make the moodle developers happy (and you should do that!), if you also
 * item/index.SuperChronoPortalMaker
 * lang/en/local_edutrader*gameidentifier*.php
 * version.php
+
+### Publish your game
+
+Create a free developer account at [moodle.org/plugins](https://moodle.org/plugins) and register your new plugin.

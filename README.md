@@ -16,20 +16,20 @@ After you have installed all 4 plugins, you can toggle the available site wide o
 
 Teachers will have to use this plugin together with the "Level Up!"-Block, so that their students can gain levels. Once they added the edutrader-Block to the course, they can toggle availability of certain games on course level.
 
-![doc/edutrader-coursesettings.png]{Course settings}
+![Course settings]{doc/edutrader-coursesettings.png}
 
 Once students gained enough experience from the "Level Up!"-Plugin, the button "Go and have som fun!" will apear in the edutrader-Block.
 
-![doc/edutrader-block.png]{Edutrader block}
+![Edutrader block]{doc/edutrader-block.png}
 
 On the following page all available games are shown and the student can open the details page.
 
-![doc/edutrader-launch-choose.png]{Choose a game}
-![doc/edutrader-launch-session.png]{Launch a session}
+![Choose a game]{doc/edutrader-launch-choose.png}
+![Launch a session]{doc/edutrader-launch-session.png}
 
 If for any reason the browser is closed or students navigate away, the session will still be open for that amount of time.
 
-![doc/edutrader-session-open.png]{Re-enter session}
+![Re-enter session]{doc/edutrader-session-open.png}
 
 ## Add new games
 

@@ -23,10 +23,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2019121100;
+$plugin->version  = 2020061600;
 $plugin->requires = 2014051200;
 $plugin->component = 'block_edutrader';
-$plugin->release = '1.0 (Build: 2019121100)';
+$plugin->release = '1.0 (Build: 2020061600)';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
     'block_xp' => 2019112000,

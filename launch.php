@@ -75,19 +75,23 @@ if (count($sessions) > 0) {
             ));
             echo $OUTPUT->footer();
             die();
-        } else if (!\block_edutrader\lib::purchase_item($item, $courseid)) {
-            // Show warning.
-            echo $OUTPUT->header();
-            echo $OUTPUT->render_from_template('block_edutrader/alert', array(
-                'type' => 'danger',
-                'content' => 'Not enough credit',
-                'url' => $CFG->wwwroot . '/my',
-            ));
-            echo $OUTPUT->footer();
-            die();
         } else {
-            // Ok, we can start, but set a timer!
-            header("refresh: " . $sessions[0]->timeleft);
+            $purchased = \block_edutrader\lib::purchase_item($item, $courseid);
+            if (!$purchased) {
+                // Show warning.
+                echo $OUTPUT->header();
+                echo $OUTPUT->render_from_template('block_edutrader/alert', array(
+                    'type' => 'danger',
+                    'content' => 'Not enough credit',
+                    'url' => $CFG->wwwroot . '/my',
+                ));
+                echo $OUTPUT->footer();
+                die();
+            } else {
+                $sessions = \block_edutrader\lib::get_sessions(0, $USER->id, $item);
+                // Ok, we can start, but set a timer!
+                header("refresh: " . $sessions[0]->timeleft);
+            }
         }
     } else {
         $credit = \block_edutrader\lib::get_credit($courseid);

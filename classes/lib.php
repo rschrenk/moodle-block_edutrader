@@ -62,7 +62,7 @@ class lib {
     }
     /**
      * Return a single item
-     * @param id identifier of item
+     * @param id itemid of item
      * @param credit of a user.
      */
     public static function get_item($id, $credit = 0) {
@@ -125,7 +125,7 @@ class lib {
         $sessions = array_values($DB->get_records_sql($sql, $params));
         foreach ($sessions as &$session) {
             $item = self::get_item($session->item);
-            $session->identifier = $item->identifier;
+            $session->itemid = $item->itemid;
             $session->title = $item->title;
             $session->timeleft = $session->maturity - time();
             $session->timeleft_readable = self::readable_duration($session->maturity - time());

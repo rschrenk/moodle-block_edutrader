@@ -22,19 +22,18 @@
 
 namespace block_edutrader;
 
-/**
+/*
  * Configure course specific settings.
  */
 require_once('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
 
 // This triggers if we use credit from one course only.
 $courseid = required_param('courseid', PARAM_INT);
 require_login(get_course($courseid));
 
 $context = \context_course::instance($courseid);
-// Must pass login
+// Must pass login.
 $PAGE->set_url('/blocks/edutrader/coursesettings.php', array('courseid' => $courseid));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
@@ -44,7 +43,7 @@ $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
 echo $OUTPUT->header();
 
-if (!lib::is_trainer($courseid)) {
+if (!\block_edutrader\lib::is_trainer($courseid)) {
     $OUTPUT->render_from_template('block_edutrader/alert', array(
         'content' => get_string('missing_capability', 'block_edutrader'),
         'type' => 'danger',
@@ -53,17 +52,17 @@ if (!lib::is_trainer($courseid)) {
 } else {
     // Show form.
     require_once($CFG->dirroot . '/blocks/edutrader/classes/coursesettings_form.php');
-    $form = new coursesettings_form();
+    $form = new \block_edutrader\coursesettings_form();
     if ($form->is_cancelled()) {
         redirect(new \moodle_url('/course/view.php', array('id' => $courseid)));
-    } elseif ($data = $form->get_data()) {
+    } else if ($data = $form->get_data()) {
         $config = array();
-        $items = lib::get_items();
-        foreach ($items AS $item) {
+        $items = \block_edutrader\lib::get_items();
+        foreach ($items as $item) {
             $config[$item->itemid] = $data->{'allow_' . $item->itemid};
         }
-        lib::set_coursesettings($courseid, $config);
-        $form = new coursesettings_form();
+        \block_edutrader\lib::set_coursesettings($courseid, $config);
+        $form = new \block_edutrader\coursesettings_form();
     }
     $form->display();
 }

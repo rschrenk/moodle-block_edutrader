@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    block_edutrader
- * @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
- * @author     Robert Schrenk
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+* @package    block_edutrader
+* @copyright  2019 Zentrum für Lernmanagement (www.lernmanagement.at)
+* @author     Robert Schrenk
+* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+*/
 
 namespace block_edutrader\privacy;
 use core_privacy\local\metadata\collection;
@@ -30,32 +30,32 @@ class provider implements \core_privacy\local\metadata\provider {
     public static function get_metadata(collection $collection) : collection {
         $collection->add_database_table(
             'block_edutrader_credit',
-             array(
-                 'userid' => 'privacy:credit:userid',
-                 'creditredeemed' => 'privacy:credit:creditredeemed',
-             ),
+            array(
+                'userid' => 'privacy:credit:userid',
+                'creditredeemed' => 'privacy:credit:creditredeemed',
+            ),
             'privacy:credit'
         );
         $collection->add_database_table(
             'block_edutrader_trades',
-             array(
-                 'userid' => 'privacy:trades:userid',
-                 'courseid' => 'privacy:trades:courseid',
-                 'item' => 'privacy:trades:item',
-                 'credit' => 'privacy:trades:credit',
-                 'maturity' => 'privacy:trades:maturity',
-                 'created' => 'privacy:trades:created',
-             ),
+            array(
+                'userid' => 'privacy:trades:userid',
+                'courseid' => 'privacy:trades:courseid',
+                'item' => 'privacy:trades:item',
+                'credit' => 'privacy:trades:credit',
+                'maturity' => 'privacy:trades:maturity',
+                'created' => 'privacy:trades:created',
+            ),
             'privacy:trades'
         );
 
         return $collection;
     }
     /**
-     * Get the list of contexts that contain user information for the specified user.
-     *
-     * @param   int           $userid       The user to search.
-     * @return  contextlist   $contextlist  The list of contexts used in this plugin.
+    * Get the list of contexts that contain user information for the specified user.
+    *
+    * @param   int           $userid       The user to search.
+    * @return  contextlist   $contextlist  The list of contexts used in this plugin.
     */
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new \core_privacy\local\request\contextlist();

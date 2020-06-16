@@ -34,15 +34,19 @@ class lib {
      */
     public static function get_credit($courseid = 0, $userid = 0) {
         global $COURSE, $DB, $USER;
-        if (empty($courseid)) $courseid = $COURSE->id;
-        if (empty($userid)) $userid = $USER->id;
+        if (empty($courseid)) {
+            $courseid = $COURSE->id;
+        }
+        if (empty($userid)) {
+            $userid = $USER->id;
+        }
         $sql = "SELECT id,xp
                     FROM {block_xp}
                     WHERE courseid=?
                         AND userid=?";
         $xps = $DB->get_records_sql($sql, array($courseid, $userid));
         $xpt = 0;
-        foreach ($xps AS $xp) {
+        foreach ($xps as $xp) {
             $xpt += $xp->xp;
         }
         $sql = "SELECT id,creditredeemed
@@ -51,7 +55,7 @@ class lib {
                         AND userid=?";
         $crs = $DB->get_records_sql($sql, array($courseid, $userid));
         $crt = 0;
-        foreach ($crs AS $cr) {
+        foreach ($crs as $cr) {
             $crt += $cr->creditredeemed;
         }
         return $xpt - $crt;
@@ -64,8 +68,10 @@ class lib {
     public static function get_item($id, $credit = 0) {
         global $CFG, $DB;
         $items = self::get_items($credit);
-        foreach ($items AS $item) {
-            if ($item->itemid == $id) return $item;
+        foreach ($items as $item) {
+            if ($item->itemid == $id) {
+                return $item;
+            }
         }
     }
     /**
@@ -76,13 +82,12 @@ class lib {
         global $CFG, $DB;
         $dbitems = $DB->get_records('block_edutrader_items', array());
         $items = array();
-        foreach ($dbitems AS $item) {
+        foreach ($dbitems as $item) {
             if (empty(get_config('local_edutrader' . $item->itemid, 'enabled'))) {
                 continue;
             }
             $item->duration_readable = self::readable_duration($item->duration);
             $item->picture = $CFG->wwwroot . '/local/edutrader' . $item->itemid . '/pix/cover.png';
-            //$item->duration_human = self::readable_duration($item->duration);
             if (!empty($credit)) {
                 $item->canpurchase = floor($credit / $item->price);
             }
@@ -101,7 +106,9 @@ class lib {
      */
     public static function get_sessions($courseid = 0, $userid = 0, $itemid = '') {
         global $DB, $USER;
-        if (empty($userid)) $userid = $USER->id;
+        if (empty($userid)) {
+            $userid = $USER->id;
+        }
         $sql = "SELECT *
                     FROM {block_edutrader_trades}
                     WHERE userid = ?
@@ -116,7 +123,7 @@ class lib {
             $params[] = $itemid;
         }
         $sessions = array_values($DB->get_records_sql($sql, $params));
-        foreach ($sessions AS &$session) {
+        foreach ($sessions as &$session) {
             $item = self::get_item($session->item);
             $session->identifier = $item->identifier;
             $session->title = $item->title;
@@ -132,7 +139,9 @@ class lib {
      */
     public static function get_coursesettings($courseid = 0) {
         global $COURSE, $DB;
-        if (empty($courseid)) $courseid = $COURSE->id;
+        if (empty($courseid)) {
+            $courseid = $COURSE->id;
+        }
         $cs = $DB->get_record('block_edutrader_courseconfig', array('courseid' => $courseid));
         $cs->config = (array)json_decode($cs->config);
         return $cs;
@@ -164,10 +173,14 @@ class lib {
      */
     public static function purchase_item($itemid, $courseid = 0, $userid = 0) {
         global $COURSE, $DB, $USER;
-        if (empty($courseid)) { $courseid = $COURSE->id; }
-        if (empty($userid)) { $userid = $USER->id; }
-        $credit = \block_edutrader\lib::get_credit($courseid, $userid);
-        $itemo = \block_edutrader\lib::get_item($itemid);
+        if (empty($courseid)) {
+            $courseid = $COURSE->id;
+        }
+        if (empty($userid)) {
+            $userid = $USER->id;
+        }
+        $credit = self::get_credit($courseid, $userid);
+        $itemo = self::get_item($itemid);
         if ($credit > $itemo->price) {
             global $DB;
             $trade = (object) array(
@@ -204,10 +217,10 @@ class lib {
      * @param seconds
      */
     public static function readable_duration($seconds) {
-        $dtF = new \DateTime('@0');
-        $dtT = new \DateTime("@$seconds");
+        $dtf = new \DateTime('@0');
+        $dtt = new \DateTime("@$seconds");
         $tx = get_strings(array('t_seconds', 't_minutes', 't_hours', 't_days'), 'block_edutrader');
-        $diff = $dtF->diff($dtT);
+        $diff = $dtf->diff($dtt);
         if ($diff->d > 0) {
             return $diff->format('%a ' . $tx->t_days . ' %H ' . $tx->t_hours . ' %I ' . $tx->t_minutes . ' %s ' . $tx->t_seconds);
         }
@@ -224,9 +237,9 @@ class lib {
      * @param seconds
      */
     public static function readable_duration_short($seconds) {
-        $dtF = new \DateTime('@0');
-        $dtT = new \DateTime("@$seconds");
-        $diff = $dtF->diff($dtT);
+        $dtf = new \DateTime('@0');
+        $dtt = new \DateTime("@$seconds");
+        $diff = $dtf->diff($dtt);
         return $diff->format('%H:%I:%s');
     }
 

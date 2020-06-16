@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/adminlib.php');
-require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
 
 class block_edutrader extends block_base {
     public function init() {
@@ -56,8 +55,6 @@ class block_edutrader extends block_base {
                 'istrainer' => \block_edutrader\lib::is_trainer($COURSE->id),
                 'wwwroot' => $CFG->wwwroot,
             ));
-
-
         return $this->content;
     }
     public function check_block_xp() {

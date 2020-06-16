@@ -26,7 +26,6 @@
  * If we can not launch the item we should die().
  */
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
 
 if (!defined('block_edutrader_item')) {
     // We die here - we are never called directly!
@@ -49,7 +48,7 @@ if (!empty($courseid)) {
     $context = \context_user::instance($USER->id);
 }
 
-// Must pass login
+// Must pass login.
 $PAGE->set_url('/blocks/edutrader/items/' . $item . '/index.php', array('courseid' => $courseid, 'redeem' => $redeem));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
@@ -64,11 +63,10 @@ if (count($sessions) > 0) {
     header("refresh: " . $sessions[0]->timeleft);
 } else {
     // Check if we have enough credit to launch.
-    require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
     if (!empty($redeem)) {
         // User said yes to launch. Check if we have enough credit.
         if (empty($courseid)) {
-            // Show warning
+            // Show warning.
             echo $OUTPUT->header();
             echo $OUTPUT->render_from_template('block_edutrader/alert', array(
                 'type' => 'danger',
@@ -77,8 +75,8 @@ if (count($sessions) > 0) {
             ));
             echo $OUTPUT->footer();
             die();
-        } elseif (!\block_edutrader\lib::purchase_item($item, $courseid)) {
-            // Show warning
+        } else if (!\block_edutrader\lib::purchase_item($item, $courseid)) {
+            // Show warning.
             echo $OUTPUT->header();
             echo $OUTPUT->render_from_template('block_edutrader/alert', array(
                 'type' => 'danger',

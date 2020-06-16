@@ -25,10 +25,9 @@ namespace block_edutrader;
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . "/formslib.php");
-require_once($CFG->dirroot . "/blocks/edutrader/locallib.php");
 
 class coursesettings_form extends \moodleform {
-    function definition() {
+    public function definition() {
         global $courseid;
         $mform = $this->_form;
         $mform->addElement('hidden', 'courseid', 0);
@@ -36,13 +35,13 @@ class coursesettings_form extends \moodleform {
         $mform->setDefault('courseid', $courseid);
         $mform->addElement('html', '<h3>' . get_string('coursesettings', 'block_edutrader') . '</h3>');
         $mform->addElement('html', '<p>' . get_string('coursesettings:description', 'block_edutrader') . '</p>');
-        $items = lib::get_items();
-        $coursesettings = lib::get_coursesettings($courseid);
+        $items = \block_edutrader\lib::get_items();
+        $coursesettings = \block_edutrader\lib::get_coursesettings($courseid);
 
-        foreach ($items AS $item) {
+        foreach ($items as $item) {
             $id = 'allow_' . $item->itemid;
             $mform->addElement('advcheckbox', $id, $item->title);
-            $mform->setDefault($id, !isset($coursesettings->config[$item->itemid]) || !empty($coursesettings->config[$item->itemid]));
+            $mform->setDefault($id, !empty($coursesettings->config[$item->itemid]));
         }
         $this->add_action_buttons();
     }

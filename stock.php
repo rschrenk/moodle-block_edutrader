@@ -22,19 +22,18 @@
 
 namespace block_edutrader;
 
-/**
+/*
  * Show a list of all items in stock and if we can purchase them.
  */
 require_once('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-require_once($CFG->dirroot . '/blocks/edutrader/locallib.php');
 
 // This triggers if we use credit from one course only.
 $courseid = required_param('courseid', PARAM_INT);
 require_login(get_course($courseid));
 
 $context = \context_course::instance($courseid);
-// Must pass login
+// Must pass login.
 $PAGE->set_url('/blocks/edutrader/stock.php', array('courseid' => $courseid));
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('stock', 'block_edutrader'));
@@ -44,17 +43,21 @@ $PAGE->requires->css('/blocks/edutrader/style/main.css');
 
 echo $OUTPUT->header();
 
-$credit = lib::get_credit();
-$items = lib::get_items($credit);
-$sessions = lib::get_sessions();
+$credit = \block_edutrader\lib::get_credit();
+$items = \block_edutrader\lib::get_items($credit);
+$sessions = \block_edutrader\lib::get_sessions();
 
-foreach ($items AS &$item) {
-    $item->is_available = lib::is_available($item->itemid, $courseid);
+foreach ($items as &$item) {
+    $item->is_available = \block_edutrader\lib::is_available($item->itemid, $courseid);
 }
 
 echo $OUTPUT->render_from_template(
     'block_edutrader/stock',
-    array('courseid' => $courseid, 'credit' => $credit, 'hassessions' => count($sessions), 'items' => $items, 'sessions' => $sessions)
+    array(
+        'courseid' => $courseid, 'credit' => $credit,
+        'hassessions' => count($sessions), 'items' => $items,
+        'sessions' => $sessions
+    )
 );
 
 echo $OUTPUT->footer();

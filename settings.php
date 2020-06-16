@@ -18,16 +18,20 @@
  * @package    block_edutrader
  * @copyright  2019 Zentrum für Lernmanagement (https://www.lernmanagement.at)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
     $items = $DB->get_records('block_edutrader_items', array(), 'title ASC', '*');
-    foreach($items AS $item) {
-        $settings->add(new admin_setting_configcheckbox('local_edutrader' . $item->itemid . '/enabled', get_string('toggle_item_enabled', 'block_edutrader', $item),
-            get_string('toggle_item_enabled:description', 'block_edutrader', $item), 1));
+    foreach ($items as $item) {
+        $settings->add(
+            new admin_setting_configcheckbox(
+                'local_edutrader' . $item->itemid . '/enabled',
+                get_string('toggle_item_enabled', 'block_edutrader', $item),
+                get_string('toggle_item_enabled:description', 'block_edutrader', $item),
+                1
+            )
+        );
     }
-
-    //$ADMIN->add('blocksettings', $settings);
 }
